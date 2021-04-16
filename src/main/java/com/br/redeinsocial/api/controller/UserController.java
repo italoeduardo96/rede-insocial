@@ -1,17 +1,16 @@
 package com.br.redeinsocial.api.controller;
 
+import com.br.redeinsocial.api.dto.CreateUserRequest;
 import com.br.redeinsocial.core.dto.request.PageFilter;
 import com.br.redeinsocial.core.dto.response.WrapperListResponse;
+import com.br.redeinsocial.core.dto.response.WrapperResponse;
 import com.br.redeinsocial.model.User;
 import com.br.redeinsocial.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -29,11 +28,32 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@ApiOperation(value = "Get users")
+	@ApiOperation(value = "Get All users")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public WrapperListResponse<User> getAll(@Valid PageFilter pageFilter) {
 		return WrapperListResponse.of(userService.getByFilter(pageFilter));
+	}
+	
+	@ApiOperation(value = "Get user by id")
+	@GetMapping("{userId}")
+	@ResponseStatus(HttpStatus.OK)
+	public WrapperResponse<User> getByid(@PathVariable Long userId) {
+		return WrapperResponse.of(userService.getUserById(userId));
+	}
+	
+	@ApiOperation(value = "Get user by nickname")
+	@GetMapping("/nickname/{nickname}")
+	@ResponseStatus(HttpStatus.OK)
+	public WrapperResponse<User> getByNickname(@PathVariable String nickname) {
+		return WrapperResponse.of(userService.getUserByNickname(nickname));
+	}
+	
+	@ApiOperation(value = "Create user")
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public WrapperResponse<User> createUser(@Valid CreateUserRequest createUserRequest) {
+		return WrapperResponse.of(userService.createUser(createUserRequest));
 	}
 	
 }

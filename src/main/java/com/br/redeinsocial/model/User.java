@@ -1,5 +1,6 @@
 package com.br.redeinsocial.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,9 +30,14 @@ public class User {
 	@Column(name = "NM_NICKNAME")
 	private String nickname;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "DT_CREATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dtCreate;
+	
+	public User(final String nickname) {
+		this.nickname = nickname;
+	}
 	
 	@PrePersist
 	public void prePersist() {
