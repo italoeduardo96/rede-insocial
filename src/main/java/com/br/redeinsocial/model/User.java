@@ -1,6 +1,7 @@
 package com.br.redeinsocial.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,12 +9,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
-@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "TB_USER", schema = "CORE")
 public class User {
 	
@@ -25,7 +27,7 @@ public class User {
 	                   allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
 	@Column(name = "ID_USER")
-	private Long id;
+	private Long userId;
 	
 	@Column(name = "NM_NICKNAME")
 	private String nickname;
@@ -34,6 +36,10 @@ public class User {
 	@Column(name = "DT_CREATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dtCreate;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="user")
+	private List<Post> posts;
 	
 	public User(final String nickname) {
 		this.nickname = nickname;
